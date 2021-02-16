@@ -807,10 +807,11 @@ static void diff_include_untracked(const struct stash_info *info, struct diff_op
 		init_tree_desc(&tree_desc[i], tree[i]->buffer, tree[i]->size);
 	}
 
+	/* mimic "git read-tree W U" without "-m" */
 	unpack_tree_opt.head_idx = -1;
 	unpack_tree_opt.src_index = &the_index;
 	unpack_tree_opt.dst_index = &the_index;
-	unpack_tree_opt.fn = twoway_merge;
+	unpack_tree_opt.fn = NULL;
 
 	if (unpack_trees(ARRAY_SIZE(tree_desc), tree_desc, &unpack_tree_opt))
 		die(_("failed to unpack trees"));
