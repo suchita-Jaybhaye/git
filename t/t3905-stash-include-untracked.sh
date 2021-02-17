@@ -303,6 +303,7 @@ test_expect_success 'stash show --include-untracked shows untracked files' '
 	>untracked &&
 	>tracked &&
 	git add tracked &&
+	empty_blob_oid=$(git rev-parse --short :tracked) &&
 	git stash -u &&
 
 	cat >expect <<-EOF &&
@@ -324,10 +325,10 @@ test_expect_success 'stash show --include-untracked shows untracked files' '
 	cat >expect <<-EOF &&
 	diff --git a/tracked b/tracked
 	new file mode 100644
-	index 0000000..e69de29
+	index 0000000..$empty_blob_oid
 	diff --git a/untracked b/untracked
 	new file mode 100644
-	index 0000000..e69de29
+	index 0000000..$empty_blob_oid
 	EOF
 	git stash show -p --include-untracked >actual &&
 	test_cmp expect actual &&
@@ -341,6 +342,7 @@ test_expect_success 'stash show --only-untracked only shows untracked files' '
 	>untracked &&
 	>tracked &&
 	git add tracked &&
+	empty_blob_oid=$(git rev-parse --short :tracked) &&
 	git stash -u &&
 
 	cat >expect <<-EOF &&
@@ -357,7 +359,7 @@ test_expect_success 'stash show --only-untracked only shows untracked files' '
 	cat >expect <<-EOF &&
 	diff --git a/untracked b/untracked
 	new file mode 100644
-	index 0000000..e69de29
+	index 0000000..$empty_blob_oid
 	EOF
 	git stash show -p --only-untracked >actual &&
 	test_cmp expect actual &&
